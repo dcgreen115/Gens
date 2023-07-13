@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.5)
-#set(CMAKE_C_FLAGS "-std=c99")
 
 enable_language(C ASM_NASM)
 set(CMAKE_ASM_NASM_FLAGS "-O1 -f elf32 -w-orphan-labels")
@@ -33,56 +32,6 @@ set(INCLUDE_DIRS
 		gtkui/glade/
 		gens/
 		)
-
-set(ASMFILES
-		gens_core/gfx/blit.o
-	gens_core/gfx/hq2x16.o
-	gens_core/gfx/gfx_cd.o
-	gens_core/io/io.o
-	gens_core/mem/mem_m68k.o
-	gens_core/mem/mem_s68k.o
-	gens_core/mem/mem_sh2.o
-	gens_core/mem/mem_z80.o
-	gens_core/misc/misc.o
-	gens_core/sound/pwm.o
-	gens_core/cpu/sh2/sh2a.o
-	gens_core/vdp/vdp_32x.o
-	gens_core/vdp/vdp_io.o
-	gens_core/vdp/vdp_rend.o
-	gens_core/cpu/z80/z80.o
-		)
-
-set(ASM_LIBRARY_SOURCES
-		gens_core/gfx/blit.h
-		gens_core/gfx/blit.asm
-		gens_core/gfx/gfx_cd.h
-		gens_core/gfx/gfx_cd.asm
-		gens_core/io/io.h
-		gens_core/io/io.asm
-		gens_core/mem/mem_m68k.h
-		gens_core/mem/mem_m68k.asm
-		gens_core/mem/mem_s68k.h
-		gens_core/mem/mem_s68k.asm
-		gens_core/mem/mem_sh2.h
-		gens_core/mem/mem_sh2.asm
-		gens_core/mem/mem_z80.h
-		gens_core/mem/mem_z80.asm
-		gens_core/misc/misc.h
-		gens_core/misc/misc.asm
-		gens_core/sound/pwm.h
-		gens_core/sound/pwm.asm
-		gens_core/cpu/sh2/sh2a.asm
-		gens_core/vdp/vdp_32x.h
-		gens_core/vdp/vdp_32x.asm
-		gens_core/vdp/vdp_io.h
-		gens_core/vdp/vdp_io.asm
-		gens_core/vdp/vdp_rend.h
-		gens_core/vdp/vdp_rend.asm
-		gens_core/cpu/z80/z80.h
-		gens_core/cpu/z80/z80.asm)
-
-add_library(asm_lib STATIC OBJECT ${ASM_LIBRARY_SOURCES})
-target_include_directories(asm_lib PRIVATE ${INCLUDE_DIRS})
 
 set(GENS_SOURCES 
 	gens_core/nasmhead.inc
@@ -206,19 +155,11 @@ set(GENS_SOURCES
 #	netplay/ccnet.h
 )
 
-#set(CMAKE_ASM_FLAGS "-O1")
 set(CMAKE_C_FLAGS -m32)
 set(CMAKE_CXX_FLAGS -m32)
-
-#include_directories(${GTK2_INCLUDE_DIRS})
-link_directories(${GTK2_LIBRARY_DIRS})
-#add_definitions(${GTK2_CFLAGS_OTHER})
 	
 add_executable(Gens ${GENS_SOURCES})
-add_dependencies(Gens asm_lib)
-#set_target_properties(Gens PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
 
 target_include_directories(Gens PRIVATE ${INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS} ${SDL_INCLUDE_DIRS})
-#target_link_directories(Gens ${GTK2_LIBRARY_DIRS})
-target_link_libraries(Gens main68k_lib sub68k_lib asm_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL)
+target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL)
 
