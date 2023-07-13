@@ -27,6 +27,10 @@ int Change_YM2612(void);
 int Change_PSG_Improv(void);
 int Change_YM2612_Improv(void);
 
+void save_state();
+void load_state();
+void system_reset();
+
 typedef enum {
 	NORMAL,
 	DOUBLE,

@@ -4,4 +4,5 @@ project(Gens)
 
 # Add sub directories
 add_subdirectory(starscream)
+add_subdirectory(gens)
 

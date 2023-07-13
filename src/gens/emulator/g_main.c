@@ -10,6 +10,7 @@
 #include "gens.h"
 #include "g_sdlsound.h"
 #include "g_sdldraw.h"
+#include "g_sdlinput.h"
 #include "port.h"
 #include "misc.h"
 #include "vdp_rend.h"
@@ -22,6 +23,12 @@
 #include "interface.h"
 #include "support.h"
 #include "ui_proxy.h"
+#include "cpu_sh2.h"
+#include "cpu_68k.h"
+#include "cpu_z80.h"
+#include "psg.h"
+#include "pwm.h"
+#include "parse.h"
 
 GtkWidget *gens_window = NULL;
 static int fast_forward = 0;
@@ -498,6 +505,107 @@ is_gens_running ()
   return Gens_Running;
 }
 
+static int
+Build_Language_String (void)
+{
+    unsigned long nb_lue = 1;
+    int sec_alloue = 1, poscar = 0;
+    enum etat_sec
+    { DEB_LIGNE, SECTION, NORMAL } etat = DEB_LIGNE;
+
+    FILE *LFile;
+
+    char c;
+
+    if (language_name)
+    {
+        free (language_name);
+        language_name = NULL;
+    }
+
+    language_name = (char **) malloc (sec_alloue * sizeof (char *));
+    language_name[0] = NULL;
+
+
+    LFile = fopen (Language_Path, "r");
+    if (!LFile)
+    {
+        LFile = fopen (Language_Path, "w");
+    }
+
+    while (nb_lue)
+    {
+        nb_lue = fread (&c, 1, 1, LFile);
+        switch (etat)
+        {
+            case DEB_LIGNE:
+                switch (c)
+                {
+                    case '[':
+                        etat = SECTION;
+                        sec_alloue++;
+                        language_name =
+                                (char **) realloc (language_name,
+                                                   sec_alloue * sizeof (char *));
+                        language_name[sec_alloue - 2] =
+                                (char *) malloc (32 * sizeof (char));
+                        language_name[sec_alloue - 1] = NULL;
+                        poscar = 0;
+                        break;
+
+                    case '\n':
+                        break;
+
+                    default:
+                        etat = NORMAL;
+                        break;
+                }
+                break;
+
+            case NORMAL:
+                switch (c)
+                {
+                    case '\n':
+                        etat = DEB_LIGNE;
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+
+            case SECTION:
+                switch (c)
+                {
+                    case ']':
+                        language_name[sec_alloue - 2][poscar] = 0;
+                        etat = DEB_LIGNE;
+                        break;
+
+                    default:
+                        if (poscar < 32)
+                            language_name[sec_alloue - 2][poscar++] = c;
+                        break;
+                }
+                break;
+        }
+    }
+
+    fclose (LFile);
+
+    if (sec_alloue == 1)
+    {
+        language_name = (char **) realloc (language_name, 2 * sizeof (char *));
+        language_name[0] = (char *) malloc (32 * sizeof (char));
+        strcpy (language_name[0], "English");
+        language_name[1] = NULL;
+        WritePrivateProfileString ("English", "Menu Language", "&English menu",
+                                   Language_Path);
+    }
+
+    return (0);
+}
+
 int
 Init (void)
 {
@@ -658,6 +766,8 @@ idle_loop (gpointer data)
 }
 
 
+
+
 int
 main (int argc, char *argv[])
 {
@@ -666,7 +776,8 @@ main (int argc, char *argv[])
   char sdlbuf[32];
   GtkWidget *widget;
 
-  add_pixmap_directory (DATADIR);
+  // TODO: may need to change this directory
+  add_pixmap_directory ("pixmaps/");
   gtk_init (&argc, &argv);
   gens_window = create_gens_window ();
 
@@ -748,105 +859,3 @@ main (int argc, char *argv[])
   return 0;
 }
 
-
-
-static int
-Build_Language_String (void)
-{
-  unsigned long nb_lue = 1;
-  int sec_alloue = 1, poscar = 0;
-  enum etat_sec
-  { DEB_LIGNE, SECTION, NORMAL } etat = DEB_LIGNE;
-
-  FILE *LFile;
-
-  char c;
-
-  if (language_name)
-    {
-      free (language_name);
-      language_name = NULL;
-    }
-
-  language_name = (char **) malloc (sec_alloue * sizeof (char *));
-  language_name[0] = NULL;
-
-
-  LFile = fopen (Language_Path, "r");
-  if (!LFile)
-    {
-      LFile = fopen (Language_Path, "w");
-    }
-
-  while (nb_lue)
-    {
-      nb_lue = fread (&c, 1, 1, LFile);
-      switch (etat)
-	{
-	case DEB_LIGNE:
-	  switch (c)
-	    {
-	    case '[':
-	      etat = SECTION;
-	      sec_alloue++;
-	      language_name =
-		(char **) realloc (language_name,
-				   sec_alloue * sizeof (char *));
-	      language_name[sec_alloue - 2] =
-		(char *) malloc (32 * sizeof (char));
-	      language_name[sec_alloue - 1] = NULL;
-	      poscar = 0;
-	      break;
-
-	    case '\n':
-	      break;
-
-	    default:
-	      etat = NORMAL;
-	      break;
-	    }
-	  break;
-
-	case NORMAL:
-	  switch (c)
-	    {
-	    case '\n':
-	      etat = DEB_LIGNE;
-	      break;
-
-	    default:
-	      break;
-	    }
-	  break;
-
-	case SECTION:
-	  switch (c)
-	    {
-	    case ']':
-	      language_name[sec_alloue - 2][poscar] = 0;
-	      etat = DEB_LIGNE;
-	      break;
-
-	    default:
-	      if (poscar < 32)
-		language_name[sec_alloue - 2][poscar++] = c;
-	      break;
-	    }
-	  break;
-	}
-    }
-
-  fclose (LFile);
-
-  if (sec_alloue == 1)
-    {
-      language_name = (char **) realloc (language_name, 2 * sizeof (char *));
-      language_name[0] = (char *) malloc (32 * sizeof (char));
-      strcpy (language_name[0], "English");
-      language_name[1] = NULL;
-      WritePrivateProfileString ("English", "Menu Language", "&English menu",
-				 Language_Path);
-    }
-
-  return (0);
-}

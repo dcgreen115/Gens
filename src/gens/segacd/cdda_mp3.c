@@ -1,6 +1,6 @@
 #include "port.h"
-#include "mp3_dec/mpg123.h"	// include <stdio.h>
-#include "mp3_dec/mpglib.h"
+#include "mpg123.h"	// include <stdio.h>
+#include "mpglib.h"
 #include "cd_file.h"
 #include "cd_aspi.h"
 #include "cdda_mp3.h"

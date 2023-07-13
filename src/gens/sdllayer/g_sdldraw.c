@@ -270,7 +270,9 @@ Update_Gens_Logo (void)
     {
       SDL_Surface *Logo;
 
-      Logo = SDL_LoadBMP (DATADIR "/gens_big.bmp");
+      // TODO: May need to rewrite the filepath
+      //Logo = SDL_LoadBMP (DATADIR "/gens_big.bmp");
+      Logo = SDL_LoadBMP ("pixmaps/gens_big.bmp");
 
       SDL_LockSurface (Logo);
       memcpy (tab, Logo->pixels, 47000 /*64000 */ );

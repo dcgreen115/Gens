@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
+set(CMAKE_ASM_NASM_FLAGS "-O1 -f elf32 -w-orphan-labels")
 
 # Build the main68k-specific Starscream code generator
 add_executable(star_main star.c)

@@ -1,6 +1,8 @@
 #ifndef _PARSE_H
 #define _PARSE_H
 
+int parseArgs (int argc, char **argv);
+
 #define MM					"--"
 #define ENABLE				"enable"
 #define DISABLE				"disable"
