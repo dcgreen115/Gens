@@ -8,7 +8,9 @@
 #define OUTPUT_BITS         16
 
 // VC++ inline
-#define INLINE              __inline
+// TODO: Figure this out later
+//#define INLINE              __inline
+#define INLINE 
 
 typedef struct slot__ {
 	int *DT;	// paramètre detune

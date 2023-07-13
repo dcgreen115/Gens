@@ -2,12 +2,11 @@
 
 	extern _Write_To_68K_Space
 	extern _Read_To_68K_Space
-
-%ifdef __GCC2
+	;; TODO
+	;; Putting the following defines inside an %ifdef __GCC2 block seems to cause issues while linking 
 %define _PCM_Chip PCM_Chip
 %define _Ram_PCM Ram_PCM
 %define _CD_Timer_Counter CD_Timer_Counter
-%endif
 
 section .bss align=64
 

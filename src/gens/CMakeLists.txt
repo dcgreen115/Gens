@@ -72,8 +72,9 @@ set(GENS_SOURCES
 	gens_core/gfx/blit.h
 	gens_core/gfx/blit2.c
 #	gens_core/gfx/blit2.h
+	gens_core/gfx/hq2x16.asm
 	gens_core/gfx/hqfilters.c
-		gens_core/gfx/gfx_cd.asm
+	gens_core/gfx/gfx_cd.asm
 	gens_core/gfx/gfx_cd.h
 	gens_core/io/io.asm
 	gens_core/io/io.h
@@ -160,6 +161,7 @@ set(CMAKE_CXX_FLAGS -m32)
 	
 add_executable(Gens ${GENS_SOURCES})
 
-target_include_directories(Gens PRIVATE ${INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS} ${SDL_INCLUDE_DIRS})
-target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL)
+target_include_directories(Gens PUBLIC ${INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS} ${SDL_INCLUDE_DIRS})
+target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL m z)
+
 
