@@ -160,6 +160,15 @@ set(GENS_SOURCES
 add_executable(Gens ${GENS_SOURCES})
 
 target_include_directories(Gens PUBLIC ${INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS} ${SDL_INCLUDE_DIRS})
-target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL m z)
-set_target_properties(Gens PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} m z)
 
+# Move the Gens executable to the build directory
+add_custom_command(TARGET Gens POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Gens> ${PROJECT_BINARY_DIR})
+
+# Move the pixmaps directory into the build directory so the Gens executable
+# can use the images inside
+add_custom_command(TARGET Gens POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_SOURCE_DIR}/pixmaps
+	${CMAKE_BINARY_DIR}/pixmaps)
