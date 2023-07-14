@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 
 enable_language(C ASM_NASM)
 set(CMAKE_ASM_NASM_FLAGS "-O1 -f elf32 -w-orphan-labels")
+set(CMAKE_C_FLAGS "-m32 -g -ggdb")
+set(CMAKE_CXX_FLAGS "-m32 -g -ggdb")
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
 find_package(SDL REQUIRED)
-#set(SDL2_INCLUDEDIR "/usr/include/x86_64-linux-gnu/")
 
 set(INCLUDE_DIRS
 		gens_core/cpu/68k/
@@ -156,12 +157,9 @@ set(GENS_SOURCES
 #	netplay/ccnet.h
 )
 
-set(CMAKE_C_FLAGS -m32)
-set(CMAKE_CXX_FLAGS -m32)
-	
 add_executable(Gens ${GENS_SOURCES})
 
 target_include_directories(Gens PUBLIC ${INCLUDE_DIRS} ${GTK2_INCLUDE_DIRS} ${SDL_INCLUDE_DIRS})
 target_link_libraries(Gens main68k_lib sub68k_lib ${GTK2_LIBRARIES} ${SDL_LIBRARIES} SDL::SDL m z)
-
+set_target_properties(Gens PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 

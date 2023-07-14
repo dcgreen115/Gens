@@ -1,7 +1,7 @@
 ;****************************************
 ;
 ; Z80 emulator 0.99
-; Copyright 2002 Stéphane Dallongeville
+; Copyright 2002 Stï¿½phane Dallongeville
 ; Used for the Genesis emulation in Gens
 ;
 ;****************************************
@@ -25,6 +25,8 @@
 
 
 ;%define __GCC
+; TODO
+%define __GCC2
 
 ;**************************
 ;
@@ -4828,9 +4830,10 @@ DECLF z80_Init, 4
 
 	push edi
 	push ebp
-%ifdef __GCC2
+; TODO: check later
+;%ifdef __GCC2
 	mov ecx, eax
-%endif
+;%endif
 	xor eax, eax
 	mov ebp, ecx
 	mov edi, ecx
@@ -4903,9 +4906,10 @@ DECLF z80_Reset, 4
 	push edi
 	push esi
 	push ebp
-%ifdef __GCC2
+; TODO: check this later
+;%ifdef __GCC2
 	mov ecx, eax
-%endif
+;%endif
 	xor eax, eax
 	mov ebp, ecx
 	mov edi, ecx
@@ -5058,9 +5062,10 @@ ALIGN32
 ; RETURN: none
 
 DECLF z80_Clear_Odo, 4
-%ifdef __GCC2
+; TODO
+;%ifdef __GCC2
 	mov ecx, eax
-%endif
+;%endif
 	mov dword [ecx + Z80.CycleCnt], 0
 	ret
 

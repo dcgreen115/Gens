@@ -777,6 +777,8 @@ main (int argc, char *argv[])
   GtkWidget *widget;
 
   // TODO: may need to change this directory
+  // After testing, this works but requires that the pixmaps directory is
+  // copied to be in the same directory as the Gens executable
   add_pixmap_directory ("pixmaps/");
   gtk_init (&argc, &argv);
   gens_window = create_gens_window ();

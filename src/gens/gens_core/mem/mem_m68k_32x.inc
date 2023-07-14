@@ -1,4 +1,6 @@
 %define PWM_BUF_SIZE 4
+; TODO: fix
+%define __GCC2
 
 	; 32X extended Read Byte
 	; *******************************************

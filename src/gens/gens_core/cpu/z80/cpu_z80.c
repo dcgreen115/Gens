@@ -25,6 +25,7 @@ Z80_Reset (void)
   Last_BUS_REQ_Cnt = 0;
   Last_BUS_REQ_St = 0;
 
+  printf("Calling z80_Reset from Z80_Reset: %p\n", &M_Z80);
   z80_Reset (&M_Z80);
 }
 
