@@ -1,17 +1,15 @@
 #ifndef _PWM_H_
 #define _PWM_H_
 
-#ifndef __GNUC__
+// TODO: may need to add support for more compilers
+#ifdef __GNUC__
+	#define FASTCALL __attribute__ ((fastcall))
+	#define DECL_FASTCALL(type, name)	type name __attribute__ ((fastcall))
+#else
+	#define FASTCALL				__fastcall
+	#define DECL_FASTCALL(type, name)	type FASTCALL name
+#endif
 
-#define FASTCALL				__fastcall
-#define DECL_FASTCALL(type, name)	type FASTCALL name
-
-#else //__GNUC__
-
-#define FASTCALL __attribute__ ((regparm(2)))
-#define DECL_FASTCALL(type, name)	type name __attribute__ ((regparm(2)))
-
-#endif //!__GNUC__
 
 extern unsigned short PWM_FIFO_R[8];
 extern unsigned short PWM_FIFO_L[8];

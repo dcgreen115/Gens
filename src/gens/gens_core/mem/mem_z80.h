@@ -2,7 +2,7 @@
 #define _MEM_Z80_H
 
 #ifdef __GNUC__
-#define __fastcall __attribute__ ((regparm(2)))
+	#define __fastcall __attribute__ ((fastcall))
 #endif
 
 extern unsigned char Ram_Z80[8 * 1024];

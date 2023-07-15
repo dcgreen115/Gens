@@ -25,8 +25,7 @@
 
 
 ;%define __GCC
-; TODO
-%define __GCC2
+;%define __GCC2
 
 ;**************************
 ;
@@ -4830,10 +4829,9 @@ DECLF z80_Init, 4
 
 	push edi
 	push ebp
-; TODO: check later
-;%ifdef __GCC2
+%ifdef __GCC2
 	mov ecx, eax
-;%endif
+%endif
 	xor eax, eax
 	mov ebp, ecx
 	mov edi, ecx
@@ -4906,10 +4904,9 @@ DECLF z80_Reset, 4
 	push edi
 	push esi
 	push ebp
-; TODO: check this later
-;%ifdef __GCC2
+%ifdef __GCC2
 	mov ecx, eax
-;%endif
+%endif
 	xor eax, eax
 	mov ebp, ecx
 	mov edi, ecx
@@ -5062,10 +5059,9 @@ ALIGN32
 ; RETURN: none
 
 DECLF z80_Clear_Odo, 4
-; TODO
-;%ifdef __GCC2
+%ifdef __GCC2
 	mov ecx, eax
-;%endif
+%endif
 	mov dword [ecx + Z80.CycleCnt], 0
 	ret
 

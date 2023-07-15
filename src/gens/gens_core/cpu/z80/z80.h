@@ -1,7 +1,7 @@
 /**********************************************************/
 /*                                                        */
 /* Z80 emulator 0.99                                      */
-/* Copyright 2002 Stéphane Dallongeville                  */
+/* Copyright 2002 Stï¿½phane Dallongeville                  */
 /* Used for the genesis emulation in Gens                 */
 /*                                                        */
 /**********************************************************/
@@ -37,17 +37,16 @@
 #define INT32   signed int
 #endif
 
-#ifndef __GNUC__
-
-#define FASTCALL				__fastcall
-#define DECL_FASTCALL(type, name)	type FASTCALL name
-
-#else //__GNUC__
-#define __fastcall __attribute__ ((regparm(2)))
-#define FASTCALL __attribute__ ((regparm(2)))
-#define DECL_FASTCALL(type, name)	type name __attribute__ ((regparm(2)))
-
-#endif //!__GNUC__
+// TODO: we may have to add other definitions to support different compilers
+// This works with GCC 12.2.0
+#ifdef __GNUC__
+	#define __fastcall __attribute__ ((fastcall))
+	#define FASTCALL __attribute__ ((fastcall))
+	#define DECL_FASTCALL(type, name)	type name __attribute__ ((fastcall))
+#else
+	#define FASTCALL				__fastcall
+	#define DECL_FASTCALL(type, name)	type FASTCALL name
+#endif
 
 
 /****************************/

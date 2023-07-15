@@ -1,5 +1,3 @@
-; TODO: fix
-%define __GCC2
 
 	; SegaCD extended Read Byte
 	; *******************************************

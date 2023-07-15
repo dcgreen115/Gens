@@ -49,7 +49,7 @@
 ; In case you're using GCC, uncomment the __GCC definition.
 
 ;%define __GCC
-%define __GCC2
+;%define __GCC2
 
 %macro DECLV 1
 
@@ -5415,9 +5415,9 @@ DECLF SH2_Reset, 8
 	push esi
 	push ebp
 ; TODO: Check to see if this is correct
-;%ifdef __GCC2
+%ifdef __GCC2
 	mov ecx, eax
-;%endif
+%endif
 	mov eax, [ecx + SH2.Status]
 	and eax, SH2_DISABLE
 	push eax
