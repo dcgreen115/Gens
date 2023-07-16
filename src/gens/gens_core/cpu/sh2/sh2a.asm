@@ -5414,7 +5414,6 @@ DECLF SH2_Reset, 8
 	push edi
 	push esi
 	push ebp
-; TODO: Check to see if this is correct
 %ifdef __GCC2
 	mov ecx, eax
 %endif

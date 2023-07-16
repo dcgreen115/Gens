@@ -9,6 +9,7 @@
 #include "port.h"
 #include "support.h"
 #include "interface.h"
+#include "timer.h"
 
 unsigned long
 GetTickCount ()

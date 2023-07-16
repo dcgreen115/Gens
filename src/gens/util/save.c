@@ -31,6 +31,7 @@
 #include "misc.h"
 #include "cd_sys.h"
 #include "support.h"
+#include "ui_proxy.h"
 
 enum
 {
@@ -109,7 +110,7 @@ Change_File_L (char *Dest, char *Dir)
 }
 
 int
-Change_File_L_CD (char *Dest, char *Dir)
+Change_File_L_CD (char *Dest, char *Dir, char *Title, char *Filter, char *Ext)
 {
 
   gchar *filename = NULL;

@@ -783,5 +783,5 @@ void _CDD_Import_Command (void)
   __attribute__ ((alias ("CDD_Import_Command")));
 unsigned char _SCD_Read_Byte (unsigned int Adr)
   __attribute__ ((alias ("SCD_Read_Byte")));
-unsigned char _SCD_Read_Word (unsigned int Adr)
+unsigned short _SCD_Read_Word (unsigned int Adr)
   __attribute__ ((alias ("SCD_Read_Word")));

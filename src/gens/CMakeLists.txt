@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 enable_language(C ASM_NASM)
 set(CMAKE_ASM_NASM_FLAGS "-O1 -f elf32 -w-orphan-labels")
-set(CMAKE_C_FLAGS "-m32 -g -ggdb")
+set(CMAKE_C_FLAGS "-m32 -g -ggdb -Wno-deprecated-declarations")
 set(CMAKE_CXX_FLAGS "-m32 -g -ggdb")
 
 find_package(PkgConfig REQUIRED)

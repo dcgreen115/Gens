@@ -222,8 +222,8 @@ Detect_Format (char *Name)
       f = (FILE *) gzopen (Name, "rb");
       if (f == NULL)
 	return -1;
-      gzread (f, buf, 1024);
-      gzclose (f);
+      gzread ((gzFile) f, buf, 1024);
+      gzclose ((gzFile) f);
     }
   else
     {
@@ -539,7 +539,7 @@ Load_Rom_CC (char *Name, int Size)
   if (!My_Rom)
     {
       Game = NULL;
-      return NULL;
+      return 0;
     }
 
   Update_Rom_Name (Name);
@@ -622,11 +622,11 @@ Load_Rom (char *Name, int inter)
 Rom *
 Load_Rom_Gz (char *Name, int inter)
 {
-  FILE *Rom_File;
+  gzFile Rom_File;
   int Size = 0;
   char *read_buf[1024];
   SetCurrentDirectory (Gens_Path);
-  if ((Rom_File = (FILE *) gzopen (Name, "rb")) == 0)
+  if ((Rom_File = gzopen (Name, "rb")) == 0)
     {
       Game = NULL;
       return (NULL);

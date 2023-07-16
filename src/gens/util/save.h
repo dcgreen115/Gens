@@ -16,6 +16,7 @@ extern char BRAM_Dir[1024];
 
 int Change_File_S(char *Dest, char *Dir);
 int Change_File_L(char *Dest, char *Dir);
+int Change_File_L_CD(char *Dest, char *Dir, char *Title, char *Filter, char *Ext);
 //int Change_Dir(char *Dest, char *Dir, char *Titre, char *Filter, char *Ext);
 FILE *Get_State_File();
 void Get_State_File_Name(char *name);

@@ -1,6 +1,7 @@
 #include "gym.h"
 #include "g_main.h"
 #include "g_sdlsound.h"
+#include "g_sdldraw.h"
 #include "rom.h"
 #include "mem_m68k.h"
 #include "gens.h"
@@ -192,7 +193,7 @@ Start_Play_GYM (void)
     create_file_chooser_dialog ("Load GYM file",
 				GTK_FILE_CHOOSER_ACTION_OPEN);
 //      fileselection_set_dir (fd.filesel, Rom_Dir);
-  addGymFilter ();
+  addGymFilter (widget);
   res = gtk_dialog_run (GTK_DIALOG (widget));
   if (res == GTK_RESPONSE_OK)
     {

@@ -20,7 +20,7 @@ typedef struct _POINT {
 enum { MB_OK, MB_ICONEXCLAMATION };
 void SetCurrentDirectory(const char *directory);
 int GetCurrentDirectory(int size,char* buf);
-//void MessageBox(const char *text, const char *error, int type);
+void MessageBox(const char *text, const char *error, int type);
 unsigned long GetTickCount();
 int GetPrivateProfileInt(const char *section, const char *var, int def, const char *filename);
 void GetPrivateProfileString(const char *section, const char *var, const char *def, char *get, int length, const char *filename);
