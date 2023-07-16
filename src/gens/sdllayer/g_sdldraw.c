@@ -57,7 +57,7 @@ win2linux (char *str)
   char *tmp = str;
   for (; *tmp; ++tmp)
     {
-      switch (*tmp)
+      switch ((unsigned char) *tmp)
 	{
 	case 0xE7:
 	  *tmp = 'c';
