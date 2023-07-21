@@ -772,6 +772,7 @@ int
 main (int argc, char *argv[])
 {
   Init_Genesis_Bios ();
+  VDP_Rend_Init();
 
   char sdlbuf[32];
   GtkWidget *widget;

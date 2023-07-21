@@ -17,31 +17,35 @@
 
 section .data align=64
 
-	DECL TAB336
+	; DECL TAB336
 
-	%assign i 0
-	%rep 240
-		dd (i * 336)
-	%assign i i+1
-	%endrep
-
-	ALIGN32
-
-	DECL TAB320
-
-	%assign i 0
-	%rep 240
-		dd (i * 336)
-	%assign i i+1
-	%endrep
+	; %assign i 0
+	; %rep 240
+	; 	dd (i * 336)
+	; %assign i i+1
+	; %endrep
+	extern TAB336
 
 	ALIGN32
+
+	; DECL TAB320
+
+	; %assign i 0
+	; %rep 240
+	; 	dd (i * 336)
+	; %assign i i+1
+	; %endrep
 	
-	Mask_N	dd 0xFFFFFFFF, 0xFFF0FFFF, 0xFF00FFFF, 0xF000FFFF, 
-			dd 0x0000FFFF, 0x0000FFF0, 0x0000FF00, 0x0000F000
 
-	Mask_F	dd 0xFFFFFFFF, 0xFFFF0FFF, 0xFFFF00FF, 0xFFFF000F, 
-			dd 0xFFFF0000, 0x0FFF0000, 0x00FF0000, 0x000F0000
+	;ALIGN32
+	
+	 ;Mask_N	dd 0xFFFFFFFF, 0xFFF0FFFF, 0xFF00FFFF, 0xF000FFFF, 
+	 ;		dd 0x0000FFFF, 0x0000FFF0, 0x0000FF00, 0x0000F000
+	extern Mask_N
+
+	 ;Mask_F	dd 0xFFFFFFFF, 0xFFFF0FFF, 0xFFFF00FF, 0xFFFF000F, 
+	;		dd 0xFFFF0000, 0x0FFF0000, 0x00FF0000, 0x000F0000
+	extern Mask_F
 
 
 section .bss align=64
@@ -84,25 +88,31 @@ section .bss align=64
 		.AF_St		resd 1
 		.AF_Len		resd 1
 	endstruc
+	;extern vx
 
-	resw (320 + 32)
+	;resw (320 + 32)
 
-	DECL MD_Screen
-	resw (336 * 240)
+	;DECL MD_Screen
+	;resw (336 * 240)
+	extern MD_Screen
 	
-	resw (320 + 32)
+	;resw (320 + 32)
 
-	DECL MD_Palette
-	resw 0x100
+	;DECL MD_Palette
+	;resw 0x100
+	extern MD_Palette
 
-	DECL Palette
-	resw 0x1000
+	;DECL Palette
+	;resw 0x1000
+	extern Palette
 
-	DECL Sprite_Struct
-	resd (0x100 * 8)
+	;DECL Sprite_Struct
+	;resd (0x100 * 8)
+	extern Sprite_Struct
 	
-	DECL Sprite_Visible
-	resd 0x100
+	;DECL Sprite_Visible
+	;resd 0x100
+	extern Sprite_Visible
 
 	DECL Data_Spr
 	.H_Min			resd 1
@@ -125,12 +135,14 @@ section .bss align=64
 	.Palette		resd 1
 	.Borne			resd 1
 
-	ALIGN_4
+	;ALIGN_4
 	
-	DECL Sprite_Over
-	resd 1
-	DECL Mode_555
-	resd 1
+	;DECL Sprite_Over
+	;resd 1
+	;DECL Mode_555
+	;resd 1
+	extern Sprite_Over
+	extern Mode_555
 
 section .text align=64
 
@@ -163,11 +175,11 @@ section .text align=64
 ;****************************************
 
 ; macro UPDATE_Y_OFFSET
-; entrée :
+; entrï¿½e :
 ; eax = cell courant
 ; param :
 ; %1 = 0 pour scroll B et 1 pour scroll A
-; %2 = 0 pour mode normal et 1 pour mode entrelacé
+; %2 = 0 pour mode normal et 1 pour mode entrelacï¿½
 ; sortie :
 ; edi = Offset y en fonction du cell courant
 
@@ -185,7 +197,7 @@ section .text align=64
 %endif
 
 %if %2 > 0
-	shr eax, 1								; on divise le Y scroll par 2 si on est en entrelacé
+	shr eax, 1								; on divise le Y scroll par 2 si on est en entrelacï¿½
 %endif
 
 	add edi, eax
@@ -203,8 +215,8 @@ section .text align=64
 ;****************************************
 
 ; macro GET_PATTERN_INFO
-; entrée :
-; - H_Scroll_CMul doivent etre correctement initialisé
+; entrï¿½e :
+; - H_Scroll_CMul doivent etre correctement initialisï¿½
 ; - esi et edi contiennent offset X et offset Y respectivement
 ; param :
 ; %1 = 0 pour scroll B et 1 pour scroll A
@@ -235,9 +247,9 @@ section .text align=64
 
 ; macro GET_PATTERN_DATA
 ; param :
-; %1 = 0 pour mode normal et 1 pour mode entrelacé
+; %1 = 0 pour mode normal et 1 pour mode entrelacï¿½
 ; %2 = 0 pour les scrolls, 1 pour la window
-; entrée :
+; entrï¿½e :
 ; - ax = Pattern Info
 ; - edi contient offset Y (si %2 = 0)
 ; - Data_Misc.Line_7 contient Line & 7 (si %2 != 0)
@@ -255,7 +267,7 @@ section .text align=64
 	and edx, byte 0x30							; edx = Palette
 
 %if %1 > 0
-	shl ecx, 6									; numero pattern * 64 (entrelacé)
+	shl ecx, 6									; numero pattern * 64 (entrelacï¿½)
 %else
 	shl ecx, 5									; numero pattern * 32 (normal)
 %endif
@@ -268,7 +280,7 @@ section .text align=64
 %%No_V_Flip
 
 %if %1 > 0
-	mov ebx, [VRam + ecx + ebx * 8]				; ebx = Ligne du pattern = Data Pattern (entrelacé)
+	mov ebx, [VRam + ecx + ebx * 8]				; ebx = Ligne du pattern = Data Pattern (entrelacï¿½)
 %else
 	mov ebx, [VRam + ecx + ebx * 4]				; ebx = Ligne du pattern = Data Pattern (normal)
 %endif
@@ -280,7 +292,7 @@ section .text align=64
 
 ; macro MAKE_SPRITE_STRUCT
 ; param :
-; %1 = 0 pour mode normal et 1 pour mode entrelacé
+; %1 = 0 pour mode normal et 1 pour mode entrelacï¿½
 
 %macro MAKE_SPRITE_STRUCT 1
 
@@ -296,7 +308,7 @@ section .text align=64
 		mov cx, [ebp + 6]						; cx = Pos X
 		mov dl, [ebp + (2 ^ 1)]					; dl = Sprite Size
 	%if %1 > 0
-		shr eax, 1								; si entrelacé, la position est divisé par 2
+		shr eax, 1								; si entrelacï¿½, la position est divisï¿½ par 2
 	%endif
 		mov dh, dl
 		and eax, 0x1FF
@@ -324,7 +336,7 @@ section .text align=64
 		mov [Sprite_Struct + edi - 32 + 24], dx	; on stocke le 1st tile du sprite
 		jz short %%End							; si le prochain pointeur est 0 alors fini
 		lea ebp, [esi + ebx * 8]				; ebp pointe sur le prochain sprite
-		cmp edi, (8 * 4 * 80)					; si on a déjà définit 80 sprites alors on arrete
+		cmp edi, (8 * 4 * 80)					; si on a dï¿½jï¿½ dï¿½finit 80 sprites alors on arrete
 		jb near %%Loop
 
 %%End
@@ -367,7 +379,7 @@ section .text align=64
 
 		add edi, byte (8 * 4)					; on avance sur la prochaine structure sprite
 		lea ebp, [esi + ebx * 8]				; ebp pointe sur le prochain sprite
-		cmp edi, (8 * 4 * 80)					; si on a déjà définit 80 sprites alors on arrete
+		cmp edi, (8 * 4 * 80)					; si on a dï¿½jï¿½ dï¿½finit 80 sprites alors on arrete
 		jb short %%Loop
 
 %%End
@@ -380,10 +392,10 @@ section .text align=64
 ; macro UPDATE_MASK_SPRITE
 ; param :
 ; %1 = Sprite Limit Emulation (1 = enable et 0 = disable)
-; entrée :
-; - Sprite_Struct doit etre correctement initialisé
+; entrï¿½e :
+; - Sprite_Struct doit etre correctement initialisï¿½
 ; sortie :
-; - edi pointe sur la première structure sprite à afficher.
+; - edi pointe sur la premiï¿½re structure sprite ï¿½ afficher.
 ; - edx contient le numero de ligne
 
 %macro UPDATE_MASK_SPRITE 1
@@ -409,9 +421,9 @@ section .text align=64
 %if %1 > 0
 		sub ecx, [Sprite_Struct + edi + 8]
 %endif
-		cmp [Sprite_Struct + edi + 0], ebx			; on teste si le sprite n'est pas en dehors de l'écran
+		cmp [Sprite_Struct + edi + 0], ebx			; on teste si le sprite n'est pas en dehors de l'ï¿½cran
 		jge short %%Out_Line_1_2
-		cmp dword [Sprite_Struct + edi + 16], 0		; on teste si le sprite n'est pas en dehors de l'écran
+		cmp dword [Sprite_Struct + edi + 16], 0		; on teste si le sprite n'est pas en dehors de l'ï¿½cran
 		jl short %%Out_Line_1_2
 
 		mov [Sprite_Visible + esi], edi
@@ -448,9 +460,9 @@ section .text align=64
 %if %1 > 0
 		sub ecx, [Sprite_Struct + edi + 8]
 %endif
-		cmp [Sprite_Struct + edi + 0], ebx			; on teste si le sprite n'est pas en dehors de l'écran
+		cmp [Sprite_Struct + edi + 0], ebx			; on teste si le sprite n'est pas en dehors de l'ï¿½cran
 		jge short %%Out_Line_2
-		cmp dword [Sprite_Struct + edi + 16], 0		; on teste si le sprite n'est pas en dehors de l'écran
+		cmp dword [Sprite_Struct + edi + 16], 0		; on teste si le sprite n'est pas en dehors de l'ï¿½cran
 		jl short %%Out_Line_2
 
 		mov [Sprite_Visible + esi], edi
@@ -503,14 +515,14 @@ section .text align=64
 
 ; macro PUTPIXEL_P0
 ; param :
-; %1 = Numéro du pixel
+; %1 = Numï¿½ro du pixel
 ; %2 = Mask pour isoler le bon pixel
-; %3 = Décalage
+; %3 = Dï¿½calage
 ; %4 = 0 pour scroll B et 1 sinon
 ; %5 = Shadow/Highlight enable
-; entrée :
+; entrï¿½e :
 ; - ebx = Pattern Data
-; - edx = Numéro de palette * 64
+; - edx = Numï¿½ro de palette * 64
 
 %macro PUTPIXEL_P0 5
 
@@ -560,13 +572,13 @@ section .text align=64
 
 ; macro PUTPIXEL_P1
 ; param :
-; %1 = Numéro du pixel
+; %1 = Numï¿½ro du pixel
 ; %2 = Mask pour isoler le bon pixel
-; %3 = Décalage
+; %3 = Dï¿½calage
 ; %4 = Shadow/Highlight enable
-; entrée :
+; entrï¿½e :
 ; - ebx = Pattern Data
-; - edx = Numéro de palette * 64
+; - edx = Numï¿½ro de palette * 64
 
 %macro PUTPIXEL_P1 4
 
@@ -590,14 +602,14 @@ section .text align=64
 
 ; macro PUTPIXEL_SPRITE
 ; param :
-; %1 = Numéro du pixel
+; %1 = Numï¿½ro du pixel
 ; %2 = Mask pour isoler le bon pixel
-; %3 = Décalage
-; %4 = Priorité
+; %3 = Dï¿½calage
+; %4 = Prioritï¿½
 ; %5 = Highlight/Shadow Enable
-; entrée :
+; entrï¿½e :
 ; - ebx = Pattern Data
-; - edx = Numéro de palette * 16
+; - edx = Numï¿½ro de palette * 16
 
 %macro PUTPIXEL_SPRITE 5
 
@@ -867,7 +879,7 @@ ALIGN4
 
 ; macro PUTLINE_SPRITE
 ; param :
-; %1 = Priorité
+; %1 = Prioritï¿½
 ; %2 = Highlight/Shadow enable
 ; entree :
 ; - ebx = Pattern Data
@@ -898,7 +910,7 @@ ALIGN4
 
 ; macro PUTLINE_SPRITE_FLIP
 ; param :
-; %1 = Priorité
+; %1 = Prioritï¿½
 ; %2 = Highlight/Shadow enable
 ; entree :
 ; - ebx = Pattern Data
@@ -995,13 +1007,13 @@ ALIGN4
 
 ; macro RENDER_LINE_SCROLL_B
 ; param :
-; %1 = 1 pour mode entrelacé et 0 pour mode normal
+; %1 = 1 pour mode entrelacï¿½ et 0 pour mode normal
 ; %2 = 1 si V-Scroll mode en 2 cell et 0 si full scroll
 ; %3 = Highlight/Shadow enable
 
 %macro RENDER_LINE_SCROLL_B 3
 
-	mov ebp, [esp]				; ebp pointe sur la surface où l'on rend
+	mov ebp, [esp]				; ebp pointe sur la surface oï¿½ l'on rend
 
 	GET_X_OFFSET 0
 
@@ -1009,13 +1021,13 @@ ALIGN4
 	xor esi, 0x3FF				; esi = scroll X norm
 	and eax, byte 7				; eax = completion pour offset
 	shr esi, 3					; esi = cell courant
-	add ebp, eax				; ebp mis à jour pour clipping
+	add ebp, eax				; ebp mis ï¿½ jour pour clipping
 	mov ebx, esi
 	and esi, [H_Scroll_CMask]	; on empeche H Cell Offset de deborder
 	and ebx, byte 1
 	mov eax, [H_Cell]
-	sub ebx, byte 2				; on démarre au cell -2 ou -1 (pour le V Scroll)
-	mov [Data_Misc.X], eax		; nombre de cell à afficher
+	sub ebx, byte 2				; on dï¿½marre au cell -2 ou -1 (pour le V Scroll)
+	mov [Data_Misc.X], eax		; nombre de cell ï¿½ afficher
 	mov [Data_Misc.Cell], ebx	; Cell courant pour le V Scroll
 
 
@@ -1023,7 +1035,7 @@ ALIGN4
 	mov eax, [VSRam + 2]
 
 %if %1 > 0
-	shr eax, 1						; on divise le Y scroll par 2 si on est en entrelacé
+	shr eax, 1						; on divise le Y scroll par 2 si on est en entrelacï¿½
 %endif
 
 	add edi, eax
@@ -1091,7 +1103,7 @@ ALIGN4
 		inc esi							; Prochain H cell
 		add ebp, byte 8					; on avance sur le prochain pattern
 		and esi, [H_Scroll_CMask]		; on empeche H Offset de deborder
-		dec byte [Data_Misc.X]			; un cell de moins à traiter
+		dec byte [Data_Misc.X]			; un cell de moins ï¿½ traiter
 		jns near %%Loop
 		
 %%End
@@ -1104,7 +1116,7 @@ ALIGN4
 
 ; macro RENDER_LINE_SCROLL_A_WIN
 ; param :
-; %1 = 1 pour mode entrelacé et 0 pour mode normal
+; %1 = 1 pour mode entrelacï¿½ et 0 pour mode normal
 ; %2 = 1 si V-Scroll mode en 2 cell et 0 si full scroll
 ; %3 = Highlight/Shadow enable
 
@@ -1128,7 +1140,7 @@ ALIGN4
 	sub ebx, edx
 	mov [Data_Misc.Start_W], edx		; Start Win (Cell)
 	mov [Data_Misc.Lenght_W], ebx		; Lenght Win (Cell)
-	dec edx								; 1 cell en moins car on affiche toujours le dernier à part
+	dec edx								; 1 cell en moins car on affiche toujours le dernier ï¿½ part
 	mov dword [Data_Misc.Start_A], 0	; Start Scroll A (Cell)
 	mov [Data_Misc.Lenght_A], edx		; Lenght Scroll A (Cell)
 	jns short %%Scroll_A
@@ -1140,7 +1152,7 @@ ALIGN4
 	sub ebx, edx
 	mov dword [Data_Misc.Start_W], 0	; Start Win (Cell)
 	mov [Data_Misc.Lenght_W], edx		; Lenght Win (Cell)
-	dec ebx								; 1 cell en moins car on affiche toujours le dernier à part
+	dec ebx								; 1 cell en moins car on affiche toujours le dernier ï¿½ part
 	mov [Data_Misc.Start_A], edx		; Start Scroll A (Cell)
 	mov [Data_Misc.Lenght_A], ebx		; Lenght Scroll A (Cell)
 	jns short %%Scroll_A
@@ -1149,7 +1161,7 @@ ALIGN4
 	ALIGN4
 
 %%Scroll_A
-	mov ebp, [esp]					; ebp pointe sur la surface où l'on rend
+	mov ebp, [esp]					; ebp pointe sur la surface oï¿½ l'on rend
 
 	GET_X_OFFSET 1
 
@@ -1157,15 +1169,15 @@ ALIGN4
 	mov ebx, [Data_Misc.Start_A]	; Premier Cell
 	xor esi, 0x3FF					; esi = scroll X norm
 	and eax, byte 7					; eax = completion pour offset
-	shr esi, 3						; esi = cell courant (début scroll A)
+	shr esi, 3						; esi = cell courant (dï¿½but scroll A)
 	mov [Data_Misc.Mask], eax		; mask pour le dernier pattern
-	mov ecx, esi					; ecx = cell courant (début scroll A) 
-	add esi, ebx					; esi = cell courant ajusté pour window clip
+	mov ecx, esi					; ecx = cell courant (dï¿½but scroll A) 
+	add esi, ebx					; esi = cell courant ajustï¿½ pour window clip
 	and ecx, byte 1
 	lea eax, [eax + ebx * 8]		; clipping + window clip
-	sub ecx, byte 2					; on démarre au cell -2 ou -1 (pour le V Scroll)
+	sub ecx, byte 2					; on dï¿½marre au cell -2 ou -1 (pour le V Scroll)
 	and esi, [H_Scroll_CMask]		; on empeche H Cell Offset de deborder
-	add ebp, eax					; ebp mis à jour pour clipping + window clip
+	add ebp, eax					; ebp mis ï¿½ jour pour clipping + window clip
 	add ebx, ecx					; ebx = Cell courant pour le V Scroll
 
 	mov edi, [VDP_Current_Line]		; edi = numero ligne
@@ -1182,7 +1194,7 @@ ALIGN4
 %%First_VScroll_OK
 
 %if %1 > 0
-	shr eax, 1						; on divise le Y scroll par 2 si on est en entrelacé
+	shr eax, 1						; on divise le Y scroll par 2 si on est en entrelacï¿½
 %endif
 
 	add edi, eax
@@ -1247,7 +1259,7 @@ ALIGN4
 		inc esi							; Prochain H cell
 		add ebp, byte 8					; on avance sur le prochain pattern
 		and esi, [H_Scroll_CMask]		; on empeche H Offset de deborder
-		dec byte [Data_Misc.Lenght_A]	; un cell de moins à traiter pour Scroll A
+		dec byte [Data_Misc.Lenght_A]	; un cell de moins ï¿½ traiter pour Scroll A
 		jns near %%Loop_SCA
 
 
@@ -1320,13 +1332,13 @@ ALIGN4
 
 %%Window
 	mov esi, [Data_Misc.Start_W]
-	mov edi, [Data_Misc.Lenght_W]			; edi = Nb cell à rendre
+	mov edi, [Data_Misc.Lenght_W]			; edi = Nb cell ï¿½ rendre
 
 %%Window_Initialised
 	mov edx, [VDP_Current_Line]
 	mov cl, [H_Win_Mul]
 	mov ebx, edx							; ebx = Line
-	mov ebp, [esp]							; ebp pointe sur la surface où l'on rend
+	mov ebp, [esp]							; ebp pointe sur la surface oï¿½ l'on rend
 	shr edx, 3								; edx = Line / 8
 	mov eax, [Win_Addr]
 	shl edx, cl
@@ -1396,7 +1408,7 @@ ALIGN4
 
 ; macro RENDER_LINE_SPR
 ; param :
-; %1 = 1 pour mode entrelacé et 0 pour mode normal
+; %1 = 1 pour mode entrelacï¿½ et 0 pour mode normal
 ; %2 = Shadow / Highlight (0 = Disable et 1 = Enable)
 
 %macro RENDER_LINE_SPR 2
@@ -1406,7 +1418,7 @@ ALIGN4
 
 %%Sprite_Over
 
-	UPDATE_MASK_SPRITE 1		; edi pointe sur le sprite à afficher
+	UPDATE_MASK_SPRITE 1		; edi pointe sur le sprite ï¿½ afficher
 	xor edi, edi
 	test esi, esi
 	mov dword [Data_Misc.X], edi
@@ -1414,7 +1426,7 @@ ALIGN4
 	jmp %%End					; on quitte
 
 %%No_Sprite_Over
-	UPDATE_MASK_SPRITE 0		; edi pointe sur le sprite à afficher
+	UPDATE_MASK_SPRITE 0		; edi pointe sur le sprite ï¿½ afficher
 	xor edi, edi
 	test esi, esi
 	mov dword [Data_Misc.X], edi
@@ -1457,7 +1469,7 @@ ALIGN4
 	%%V_Flip
 		sub ebx, edx
 		xor ecx, 7								; ecx = 7 - (Y Offset & 7)
-		add esi, ebx							; esi pointe sur le pattern à afficher
+		add esi, ebx							; esi pointe sur le pattern ï¿½ afficher
 %if %1 > 0
 		lea ebx, [ebx + edx + 64]				; on restore la valeur de ebx + 64
 		lea esi, [esi + ecx * 8]				; et ainsi que sur la bonne ligne du pattern
@@ -1471,17 +1483,17 @@ ALIGN4
 	ALIGN4
 	
 	%%No_V_Flip
-		add esi, edx							; esi pointe sur le pattern à afficher
+		add esi, edx							; esi pointe sur le pattern ï¿½ afficher
 %if %1 > 0
-		add ebx, byte 64						; on additionne 64 à ebx
+		add ebx, byte 64						; on additionne 64 ï¿½ ebx
 		lea esi, [esi + ecx * 8]				; et ainsi que sur la bonne ligne du pattern
 %else			
-		add ebx, byte 32						; on additionne 32 à ebx
+		add ebx, byte 32						; on additionne 32 ï¿½ ebx
 		lea esi, [esi + ecx * 4]				; et ainsi que sur la bonne ligne du pattern
 %endif
 
 	%%Suite
-		mov [Data_Misc.Next_Cell], ebx			; la prochain Cell X de ce sprite se trouve à ebx octets
+		mov [Data_Misc.Next_Cell], ebx			; la prochain Cell X de ce sprite se trouve ï¿½ ebx octets
 		mov edx, [Data_Misc.Palette]			; edx = Numero de palette * 64
 
 		test eax, 0x800							; on teste H Flip
@@ -1512,7 +1524,7 @@ ALIGN4
 			cmp ebp, [H_Pix]
 			jge %%Spr_Test_X_Max_Loop
 
-		test eax, 0x8000						; on teste la priorité
+		test eax, 0x8000						; on teste la prioritï¿½
 		jnz near %%H_Flip_P1
 		jmp short %%H_Flip_P0
 
@@ -1570,7 +1582,7 @@ ALIGN4
 			cmp ebp, -7
 			jl %%Spr_Test_X_Min_Loop
 
-		test ax, 0x8000							; on teste la priorité
+		test ax, 0x8000							; on teste la prioritï¿½
 		jnz near %%No_H_Flip_P1
 		jmp short %%No_H_Flip_P0
 
@@ -1618,7 +1630,7 @@ ALIGN4
 
 ; macro RENDER_LINE
 ; param :
-; %1 = 1 pour mode entrelacé et 0 sinon
+; %1 = 1 pour mode entrelacï¿½ et 0 sinon
 ; %2 = Shadow / Highlight (0 = Disable et 1 = Enable)
 
 %macro RENDER_LINE 2
@@ -1650,7 +1662,7 @@ ALIGN4
 		mov ebx, [VDP_Current_Line]
 		xor eax, eax
 		mov edi, [TAB336 + ebx * 4]
-		test dword [VDP_Reg + 1 * 4], 0x40		; on teste si le VDP est activé
+		test dword [VDP_Reg + 1 * 4], 0x40		; on teste si le VDP est activï¿½
 		push edi								; on va se avoir besoin de cette valeur plus tard
 		jnz short .VDP_Enable					; sinon, on n'affiche rien
 
@@ -1823,7 +1835,7 @@ ALIGN4
 		mov ebx, [VDP_Current_Line]
 		xor eax, eax
 		mov edi, [TAB336 + ebx * 4]
-		test dword [VDP_Reg + 1 * 4], 0x40		; on teste si le VDP est activé
+		test dword [VDP_Reg + 1 * 4], 0x40		; on teste si le VDP est activï¿½
 		push edi								; on va se avoir besoin de cette valeur plus tard
 		jnz short .VDP_Enable					; sinon, on n'affiche rien
 

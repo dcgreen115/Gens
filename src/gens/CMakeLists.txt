@@ -82,7 +82,8 @@ set(GENS_SOURCES
 	gens_core/vdp/vdp_32x.h
 	gens_core/vdp/vdp_io.asm
 	gens_core/vdp/vdp_io.h
-	gens_core/vdp/vdp_rend.asm
+	gens_core/vdp/vdp_rend_a.asm
+	gens_core/vdp/vdp_rend.c
 	gens_core/vdp/vdp_rend.h
 	gens_core/vdp/vdp_32x.asm
 	segacd/cd_aspi.c
